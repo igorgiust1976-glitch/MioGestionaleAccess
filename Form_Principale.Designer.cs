@@ -141,6 +141,20 @@
             this.button_Tipologie.Text = "Anagrafiche Tipologie";
             this.groupBox_Anagrafiche.Controls.Add(this.button_Tipologie);
             //
+            // button_Anagrafiche Fornitori
+            // 
+            this.button_Fornitori = new System.Windows.Forms.Button();
+            this.button_Fornitori.Location = new System.Drawing.Point(445, 18);
+            this.button_Fornitori.Name = "button_Fornitori";
+            this.button_Fornitori.Size = new System.Drawing.Size(130, 25);
+            this.button_Fornitori.TabIndex = 0;
+            this.button_Fornitori.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button_Fornitori.ForeColor = System.Drawing.Color.FromArgb(204, 204, 204);
+            this.button_Fornitori.BackColor = System.Drawing.Color.FromArgb(175, 132, 51);
+            this.button_Fornitori.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Fornitori.Text = "Anagrafiche Fornitori";
+            this.groupBox_Anagrafiche.Controls.Add(this.button_Fornitori);
+            //
             // datagridview1
             // 
             this.datagridview1 = new System.Windows.Forms.DataGridView();
@@ -185,6 +199,7 @@
         private System.Windows.Forms.Button button_Anagrafiche;
         private System.Windows.Forms.Button button_Articoli;
         private System.Windows.Forms.Button button_Tipologie;
+        private System.Windows.Forms.Button button_Fornitori;
         private System.Windows.Forms.DataGridView datagridview1;
     }
 }

@@ -21,6 +21,7 @@ public partial class Form_Principale : Form
         button_Articoli.Click += (s, ev) => button_Articoli_Click();
         button_Chiudi.Click += (s, ev) => button_Chiudi_Click();
         button_Tipologie.Click += (s, ev) => button_Anagrafiche_Tipologie_Click();
+        button_Fornitori.Click += (s, ev) => button_Fornitori_Click();
                 
         // Richiama EvidenziaDatePassate al click su intestazioni di colonna
         datagridview1.ColumnHeaderMouseClick += (s, ev) => EvidenziaDatePassate(datagridview1);
@@ -37,6 +38,12 @@ public partial class Form_Principale : Form
             formTipologie.ShowDialog(this);
             // Ricarica la tabella dopo aver chiuso Form_Anagrafiche_Tipologie (se sono state fatte modifiche)
             CaricaTabella_Eventi();
+    }
+
+    private void button_Fornitori_Click()
+    {
+        Form_Anagrafiche_Fornitori formFornitori = new();
+        formFornitori.ShowDialog(this);
     }
 
     private void CaricaTabella_Eventi()
