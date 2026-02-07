@@ -11,21 +11,29 @@ public partial class Form_Anagrafiche_Tipologie : Form
     public Form_Anagrafiche_Tipologie()
     {
         InitializeComponent();
-        Load += new EventHandler(Form_Anagrafiche_Tipologie_Load);
+        Load += (s, e) => Form_Load(s, e);
     }
 
-    private void Form_Anagrafiche_Tipologie_Load(object? sender, EventArgs e)
+    private void Form_Load(object? sender, EventArgs e)
     {
         Text = "Gestione Tipologie Articoli";
         
-        // Wire dei click dei bottoni
+        ConfiguraDataGridView();
+        CaricaTipologie();
+
+        // Wire degli eventi
         buttonAggiungi.Click += (s, ev) => buttonAggiungi_Click();
         buttonModifica.Click += (s, ev) => buttonModifica_Click();
         buttonElimina.Click += (s, ev) => buttonElimina_Click();
         buttonChiudi.Click += (s, ev) => buttonChiudi_Click();
+    }
 
-        // Carica automaticamente le tipologie al load
-        CaricaTipologie();
+    private void ConfiguraDataGridView()
+    {
+        dataGridViewTipologie.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        dataGridViewTipologie.MultiSelect = false;
+        dataGridViewTipologie.ReadOnly = true;
+        dataGridViewTipologie.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
     }
 
     private void CaricaTipologie()

@@ -16,14 +16,19 @@ public partial class Form_Gestione_Eventi : Form
     public Form_Gestione_Eventi()
     {
         InitializeComponent();
-        Load += new EventHandler(Form_Gestione_Eventi_Load);
+        Load += (s, e) => Form_Load(s, e);
     }
 
-    private void Form_Gestione_Eventi_Load(object? sender, EventArgs e)
+    private void Form_Load(object? sender, EventArgs e)
     {
         Text = "Gestione Eventi";
         
-        buttonCarica.Click += (s, ev) => CaricaEventi(true);
+        ConfiguraDataGridView();
+        ConfiguraDataGridViewRighe();
+        CaricaComboBoxes();
+        
+        // Wire degli eventi
+        buttonCarica.Click += (s, ev) => CaricaEventi();
         buttonSalva.Click += (s, ev) => SalvaEventi();
         buttonNuovo.Click += (s, ev) => AggiungiNuovoEvento();
         buttonChiudi.Click += (s, ev) => buttonChiudi_Click();
@@ -32,7 +37,57 @@ public partial class Form_Gestione_Eventi : Form
         monthCalendar.Leave += MonthCalendar_Leave;
         dataGridViewEventi.ColumnHeaderMouseClick += (s, ev) => Form_Principale.EvidenziaDatePassate(dataGridViewEventi);
         
-        CaricaEventi(false);
+        CaricaEventi();
+    }
+
+    private void ConfiguraDataGridView()
+    {
+        dataGridViewEventi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        dataGridViewEventi.MultiSelect = false;
+        dataGridViewEventi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+    }
+
+    private void ConfiguraDataGridViewRighe()
+    {
+        dataGridViewEventi_Riga.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        dataGridViewEventi_Riga.MultiSelect = false;
+        dataGridViewEventi_Riga.ReadOnly = true;
+        dataGridViewEventi_Riga.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+    }
+
+    private void CaricaComboBoxes()
+    {
+        try
+        {
+            var clientiTable = clientiRepository.GetAll();
+            var tipologieTable = tipologieRepository.GetAll();
+            
+            DataGridViewComboBoxColumn comboCliente = new()
+            {
+                Name = "ComboCliente",
+                HeaderText = "Cliente",
+                DataPropertyName = "ID_Cliente",
+                DataSource = clientiTable,
+                DisplayMember = "Rag_Soc",
+                ValueMember = "ID"
+            };
+            dataGridViewEventi.Columns.Add(comboCliente);
+            
+            DataGridViewComboBoxColumn comboTipologia = new()
+            {
+                Name = "ComboTipologia",
+                HeaderText = "Tipo Evento",
+                DataPropertyName = "ID_Tipologia_noleggi",
+                DataSource = tipologieTable,
+                DisplayMember = "Descrizione",
+                ValueMember = "ID"
+            };
+            dataGridViewEventi.Columns.Add(comboTipologia);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Errore nel caricamento dei dati per i ComboBox: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void DataGridViewEventi_CellClick(object? s, DataGridViewCellEventArgs ev)
@@ -155,60 +210,41 @@ public partial class Form_Gestione_Eventi : Form
         }
     }
 
-    private void CaricaEventi(bool refresh)
+    private void CaricaEventi()
     {
         try
         {
             datiEventi = eventiRepository.GetAll();
             dataGridViewEventi.DataSource = datiEventi;
             
-            if (dataGridViewEventi.Columns.Contains("ID")) dataGridViewEventi.Columns["ID"].Visible = false;
-            if (dataGridViewEventi.Columns.Contains("ID_Tipologia_noleggi")) dataGridViewEventi.Columns["ID_Tipologia_noleggi"].Visible = false;
-            if (dataGridViewEventi.Columns.Contains("ID_evento_riga")) dataGridViewEventi.Columns["ID_evento_riga"].Visible = false;
-            if (dataGridViewEventi.Columns.Contains("ID_Cliente")) dataGridViewEventi.Columns["ID_Cliente"].Visible = false;
-            if (dataGridViewEventi.Columns.Contains("Rag_Soc")) dataGridViewEventi.Columns["Rag_Soc"].Visible = false;
-            if (dataGridViewEventi.Columns.Contains("Descrizione")) dataGridViewEventi.Columns["Descrizione"].Visible = false;
+            // Nascondi colonne non necessarie
+            if (dataGridViewEventi.Columns.Contains("ID")) 
+                dataGridViewEventi.Columns["ID"].Visible = false;
+            if (dataGridViewEventi.Columns.Contains("ID_Tipologia_noleggi")) 
+                dataGridViewEventi.Columns["ID_Tipologia_noleggi"].Visible = false;
+            if (dataGridViewEventi.Columns.Contains("ID_evento_riga")) 
+                dataGridViewEventi.Columns["ID_evento_riga"].Visible = false;
+            if (dataGridViewEventi.Columns.Contains("ID_Cliente")) 
+                dataGridViewEventi.Columns["ID_Cliente"].Visible = false;
+            if (dataGridViewEventi.Columns.Contains("Rag_Soc")) 
+                dataGridViewEventi.Columns["Rag_Soc"].Visible = false;
+            if (dataGridViewEventi.Columns.Contains("Descrizione")) 
+                dataGridViewEventi.Columns["Descrizione"].Visible = false;
 
-if (dataGridViewEventi.Columns.Contains("Nome_Evento")) dataGridViewEventi.Columns["Nome_Evento"]!.HeaderText = "Nome Evento";
-                if (dataGridViewEventi.Columns.Contains("Data_inizio")) dataGridViewEventi.Columns["Data_inizio"]!.HeaderText = "Data Inizio";
-                if (dataGridViewEventi.Columns.Contains("Data_fine")) dataGridViewEventi.Columns["Data_fine"]!.HeaderText = "Data Fine";
+            // Configura i header
+            if (dataGridViewEventi.Columns.Contains("Nome_Evento")) 
+                dataGridViewEventi.Columns["Nome_Evento"]!.HeaderText = "Nome Evento";
+            if (dataGridViewEventi.Columns.Contains("Data_inizio")) 
+                dataGridViewEventi.Columns["Data_inizio"]!.HeaderText = "Data Inizio";
+            if (dataGridViewEventi.Columns.Contains("Data_fine")) 
+                dataGridViewEventi.Columns["Data_fine"]!.HeaderText = "Data Fine";
 
-                if (dataGridViewEventi.Columns.Contains("Data_inizio")) dataGridViewEventi.Columns["Data_inizio"]!.DefaultCellStyle.Format = "dd/MM/yyyy";
-                if (dataGridViewEventi.Columns.Contains("Data_fine")) dataGridViewEventi.Columns["Data_fine"]!.DefaultCellStyle.Format = "dd/MM/yyyy";
+            // Configura format
+            if (dataGridViewEventi.Columns.Contains("Data_inizio")) 
+                dataGridViewEventi.Columns["Data_inizio"]!.DefaultCellStyle.Format = "dd/MM/yyyy";
+            if (dataGridViewEventi.Columns.Contains("Data_fine")) 
+                dataGridViewEventi.Columns["Data_fine"]!.DefaultCellStyle.Format = "dd/MM/yyyy";
 
-            if (!refresh)
-            {
-                if (!dataGridViewEventi.Columns.Contains("ComboCliente"))
-                {
-                    var clientiTable = clientiRepository.GetAll();
-                    DataGridViewComboBoxColumn comboCliente = new()
-                    {
-                        Name = "ComboCliente",
-                        HeaderText = "Cliente",
-                        DataPropertyName = "ID_Cliente",
-                        DataSource = clientiTable,
-                        DisplayMember = "Rag_Soc",
-                        ValueMember = "ID"
-                    };
-                    dataGridViewEventi.Columns.Add(comboCliente);
-                }
-                
-                if (!dataGridViewEventi.Columns.Contains("ComboTipologia"))
-                {
-                    var tipologieTable = tipologieRepository.GetAll();
-                    DataGridViewComboBoxColumn comboTipologia = new()
-                    {
-                        Name = "ComboTipologia",
-                        HeaderText = "Tipo Evento",
-                        DataPropertyName = "ID_Tipologia_noleggi",
-                        DataSource = tipologieTable,
-                        DisplayMember = "Descrizione",
-                        ValueMember = "ID"
-                    };
-                    dataGridViewEventi.Columns.Add(comboTipologia);
-                }
-            }
-            
             dataGridViewEventi.AutoResizeColumns();
             dataGridViewEventi.AutoResizeRows();
             Form_Principale.EvidenziaDatePassate(dataGridViewEventi);
@@ -258,7 +294,7 @@ if (dataGridViewEventi.Columns.Contains("Nome_Evento")) dataGridViewEventi.Colum
             }
             
             MessageBox.Show("Modifiche salvate con successo!", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            CaricaEventi(true);
+            CaricaEventi();
         }
         catch (Exception ex)
         {

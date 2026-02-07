@@ -11,21 +11,29 @@ public partial class Form_Anagrafiche_Articoli : Form
     public Form_Anagrafiche_Articoli()
     {
         InitializeComponent();
-        Load += new EventHandler(Form_Anagrafiche_Articoli_Load);
+        Load += (s, e) => Form_Load(s, e);
     }
 
-    private void Form_Anagrafiche_Articoli_Load(object? sender, EventArgs e)
+    private void Form_Load(object? sender, EventArgs e)
     {
         Text = "Gestione Articoli";
         
-        // Wire dei click dei bottoni
+        ConfiguraDataGridView();
+        CaricaArticoli();
+
+        // Wire degli eventi
         buttonAggiungi.Click += (s, ev) => buttonAggiungi_Click();
         buttonModifica.Click += (s, ev) => buttonModifica_Click();
         buttonElimina.Click += (s, ev) => buttonElimina_Click();
         buttonChiudi.Click += (s, ev) => buttonChiudi_Click();
+    }
 
-        // Carica automaticamente gli articoli al load
-        CaricaArticoli();
+    private void ConfiguraDataGridView()
+    {
+        dataGridViewArticoli.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        dataGridViewArticoli.MultiSelect = false;
+        dataGridViewArticoli.ReadOnly = true;
+        dataGridViewArticoli.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
     }
 
     private void CaricaArticoli()
