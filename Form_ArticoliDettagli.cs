@@ -8,7 +8,7 @@ public partial class Form_ArticoliDettagli : Form
 {
     private int? idArticolo;
     private readonly ArticoliRepository articoliRepository = new();
-    private readonly TipologieRepository tipologieRepository = new();
+    private readonly Tipologia_ArticoliRepository tipologiaArticoliRepository = new();
     private readonly FornitorIRepository fornitoriRepository = new();
 
     public Form_ArticoliDettagli(int? id)
@@ -26,10 +26,10 @@ public partial class Form_ArticoliDettagli : Form
         buttonSalva.Click += (s, ev) => buttonSalva_Click();
         buttonAnnulla.Click += (s, ev) => buttonAnnulla_Click();
         buttonAggiungiFornitore.Click += (s, ev) => buttonAggiungiFornitore_Click();
-        buttonAggiungiTipologia.Click += (s, ev) => buttonAggiungiTipologia_Click();
+        buttonAggiungiTipologiaArticoli.Click += (s, ev) => buttonAggiungiTipologiaArticoli_Click();
 
         // Carica i dati dai combobox
-        CaricaTipologie();
+        CaricaTipologiaArticoli();
         CaricaFornitori();
 
         // Se è modifica, carica i dati dell'articolo
@@ -39,12 +39,12 @@ public partial class Form_ArticoliDettagli : Form
         }
     }
 
-    private void buttonAggiungiTipologia_Click()
+    private void buttonAggiungiTipologiaArticoli_Click()
     {
         Form_TipologieDettagli formDettagli = new(null);
         formDettagli.ShowDialog(this);
         // Ricarica le tipologie dopo aver chiuso il form dei dettagli
-        CaricaTipologie();
+        CaricaTipologiaArticoli();
     }
 
     private void buttonAggiungiFornitore_Click()
@@ -55,11 +55,11 @@ public partial class Form_ArticoliDettagli : Form
         CaricaFornitori();
     }
 
-    private void CaricaTipologie()
+    private void CaricaTipologiaArticoli()
     {
         try
         {
-            DataTable dt = tipologieRepository.GetAll();
+            DataTable dt = tipologiaArticoliRepository.GetAll();
             comboBoxTipologia.DataSource = dt;
             comboBoxTipologia.DisplayMember = "Descrizione";
             comboBoxTipologia.ValueMember = "ID";

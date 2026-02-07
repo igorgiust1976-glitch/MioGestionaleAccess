@@ -131,15 +131,15 @@ namespace MioGestionaleAccess
             this.Controls.Add(this.comboBoxTipologia);
 
             // Button + Tipologia
-            this.buttonAggiungiTipologia = new System.Windows.Forms.Button();
-            this.buttonAggiungiTipologia.Location = new System.Drawing.Point(385, 195);
-            this.buttonAggiungiTipologia.Size = new System.Drawing.Size(20, 20);
-            this.buttonAggiungiTipologia.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.buttonAggiungiTipologia.ForeColor = System.Drawing.Color.FromArgb(204, 204, 204);
-            this.buttonAggiungiTipologia.BackColor = System.Drawing.Color.FromArgb(51, 151, 51);
-            this.buttonAggiungiTipologia.Text = "+";
-            this.buttonAggiungiTipologia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Controls.Add(this.buttonAggiungiTipologia);   
+            this.buttonAggiungiTipologiaArticoli = new System.Windows.Forms.Button();
+            this.buttonAggiungiTipologiaArticoli.Location = new System.Drawing.Point(385, 195);
+            this.buttonAggiungiTipologiaArticoli.Size = new System.Drawing.Size(20, 20);
+            this.buttonAggiungiTipologiaArticoli.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.buttonAggiungiTipologiaArticoli.ForeColor = System.Drawing.Color.FromArgb(204, 204, 204);
+            this.buttonAggiungiTipologiaArticoli.BackColor = System.Drawing.Color.FromArgb(51, 151, 51);
+            this.buttonAggiungiTipologiaArticoli.Text = "+";
+            this.buttonAggiungiTipologiaArticoli.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Controls.Add(this.buttonAggiungiTipologiaArticoli);   
             
             // Label Note
             this.labelNote = new System.Windows.Forms.Label();
@@ -203,6 +203,6 @@ namespace MioGestionaleAccess
         private System.Windows.Forms.Button buttonSalva;
         private System.Windows.Forms.Button buttonAnnulla;
         private System.Windows.Forms.Button buttonAggiungiFornitore;
-        private System.Windows.Forms.Button buttonAggiungiTipologia;
+        private System.Windows.Forms.Button buttonAggiungiTipologiaArticoli;
     }
 }
