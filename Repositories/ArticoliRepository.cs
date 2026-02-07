@@ -19,10 +19,12 @@ public class ArticoliRepository
         {
             using (OleDbConnection conn = new(DatabaseManager.ConnectionString))
             {
-                string query = @"SELECT Articoli.*, Cliente.Rag_Soc, Tipologia_noleggi.Descrizione 
-                               FROM (Articoli LEFT JOIN Cliente ON Articoli.ID_Fornitore = Cliente.ID) 
-                               LEFT JOIN Tipologia_noleggi ON Articoli.ID_Tipologia = Tipologia_noleggi.ID
-                               ORDER BY Articoli.Codice_interno;";
+                string query = @"SELECT Articoli.*, Tipologia_Articoli.Descrizione, Fornitori.Rag_Soc
+                                FROM Fornitori
+                                INNER JOIN (Articoli
+                                 LEFT JOIN Tipologia_Articoli ON Articoli.ID_Tipologia = Tipologia_Articoli.ID) 
+                                 ON Fornitori.ID = Articoli.ID_Fornitore 
+                                 ORDER BY Articoli.Codice_interno;";
                 OleDbDataAdapter adapter = new(query, conn);
                 DataTable dt = new();
                 adapter.Fill(dt);
@@ -44,10 +46,12 @@ public class ArticoliRepository
         {
             using (OleDbConnection conn = new(DatabaseManager.ConnectionString))
             {
-                string query = @"SELECT Articoli.*, Cliente.Rag_Soc, Tipologia_noleggi.Descrizione 
-                               FROM (Articoli LEFT JOIN Cliente ON Articoli.ID_Fornitore = Cliente.ID) 
-                               LEFT JOIN Tipologia_noleggi ON Articoli.ID_Tipologia = Tipologia_noleggi.ID
-                               WHERE Articoli.ID = ?;";
+                string query = @"SELECT Articoli.*, Tipologia_Articoli.Descrizione, Fornitori.Rag_Soc
+                               FROM Fornitori
+                               INNER JOIN (Articoli
+                                LEFT JOIN Tipologia_Articoli ON Articoli.ID_Tipologia = Tipologia_Articoli.ID) 
+                                ON Fornitori.ID = Articoli.ID_Fornitore
+                                WHERE Articoli.ID = ?;";
                 OleDbDataAdapter adapter = new(query, conn);
                 adapter.SelectCommand.Parameters.AddWithValue("?", id);
                 DataTable dt = new();
@@ -72,7 +76,7 @@ public class ArticoliRepository
             {
                 conn.Open();
 
-                string query = @"INSERT INTO Articoli (Codice_interno, Descrizione, Giacenza, ID_Fornitore, ID_Tipologia, Note)
+                string query = @"INSERT INTO Articoli ([Codice_interno], [Descrizione], [Giacenza], [ID_Fornitore], [ID_Tipologia], [Note])
                                VALUES (?, ?, ?, ?, ?, ?);";
 
                 using (OleDbCommand cmd = new(query, conn))
@@ -106,9 +110,9 @@ public class ArticoliRepository
                 conn.Open();
 
                 string query = @"UPDATE Articoli SET 
-                               Codice_interno = ?, Descrizione = ?, Giacenza = ?, 
-                               ID_Fornitore = ?, ID_Tipologia = ?, Note = ?
-                               WHERE ID = ?;";
+                               [Codice_interno] = ?, [Descrizione] = ?, [Giacenza] = ?, 
+                               [ID_Fornitore] = ?, [ID_Tipologia] = ?, [Note] = ?
+                               WHERE [ID] = ?;";
 
                 using (OleDbCommand cmd = new(query, conn))
                 {

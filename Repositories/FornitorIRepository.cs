@@ -66,8 +66,8 @@ public class FornitorIRepository
             {
                 conn.Open();
 
-                string query = @"INSERT INTO Fornitori (Rag_Soc, Indirizzo, Tel_1, Tel_2, Riferimento, Note)
-                               VALUES (?, ?, ?, ?, ?, ?);";
+                string query = @"INSERT INTO Fornitori ([Rag_Soc], [Indirizzo], [Tel_1], [Tel_2], [Riferimento], [Note])
+                               VALUES (?, ?, ?, ?, ?, ?)";
 
                 using (OleDbCommand cmd = new(query, conn))
                 {
@@ -100,8 +100,8 @@ public class FornitorIRepository
                 conn.Open();
 
                 string query = @"UPDATE Fornitori SET 
-                               Rag_Soc = ?, Indirizzo = ?, Tel_1 = ?, Tel_2 = ?, Riferimento = ?, Note = ?
-                               WHERE ID = ?;";
+                               [Rag_Soc] = ?, [Indirizzo] = ?, [Tel_1] = ?, [Tel_2] = ?, [Riferimento] = ?, [Note] = ?
+                               WHERE [ID] = ?";
 
                 using (OleDbCommand cmd = new(query, conn))
                 {
@@ -134,7 +134,7 @@ public class FornitorIRepository
             {
                 conn.Open();
 
-                string query = "DELETE FROM Fornitori WHERE ID = ?;";
+                string query = "DELETE FROM Fornitori WHERE [ID] = ?";
 
                 using (OleDbCommand cmd = new(query, conn))
                 {

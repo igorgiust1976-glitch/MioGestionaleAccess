@@ -23,7 +23,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 600);
+            this.ClientSize = new System.Drawing.Size(800, 620);
             this.Icon = new System.Drawing.Icon(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "Resources", "app.ico"));
             this.Name = "MainForm";
             this.Text = "Gestionale Sagre";
@@ -91,7 +91,7 @@
             this.groupBox_Anagrafiche = new System.Windows.Forms.GroupBox();
             this.groupBox_Anagrafiche.Location = new System.Drawing.Point(15, 45);
             this.groupBox_Anagrafiche.Name = "groupBox_Anagrafiche";
-            this.groupBox_Anagrafiche.Size = new System.Drawing.Size(770, 55);
+            this.groupBox_Anagrafiche.Size = new System.Drawing.Size(770, 80);
             this.groupBox_Anagrafiche.TabIndex = 1;
             this.groupBox_Anagrafiche.TabStop = false;
             this.groupBox_Anagrafiche.Text = "Anagrafiche";
@@ -155,12 +155,26 @@
             this.button_Fornitori.Text = "Anagrafiche Fornitori";
             this.groupBox_Anagrafiche.Controls.Add(this.button_Fornitori);
             //
+            // button_Anagrafiche Tipologie Articoli
+            // 
+            this.button_TipologieArticoli = new System.Windows.Forms.Button();
+            this.button_TipologieArticoli.Location = new System.Drawing.Point(25, 48);
+            this.button_TipologieArticoli.Name = "button_TipologieArticoli";
+            this.button_TipologieArticoli.Size = new System.Drawing.Size(130, 25);
+            this.button_TipologieArticoli.TabIndex = 0;
+            this.button_TipologieArticoli.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button_TipologieArticoli.ForeColor = System.Drawing.Color.FromArgb(204, 204, 204);
+            this.button_TipologieArticoli.BackColor = System.Drawing.Color.FromArgb(100, 150, 200);
+            this.button_TipologieArticoli.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_TipologieArticoli.Text = "Tipologie Articoli";
+            this.groupBox_Anagrafiche.Controls.Add(this.button_TipologieArticoli);
+            //
             // datagridview1
             // 
             this.datagridview1 = new System.Windows.Forms.DataGridView();
-            this.datagridview1.Location = new System.Drawing.Point(15, 115);
+            this.datagridview1.Location = new System.Drawing.Point(15, 135);
             this.datagridview1.Name = "datagridview1";
-            this.datagridview1.Size = new System.Drawing.Size(770, 485);
+            this.datagridview1.Size = new System.Drawing.Size(770, 465);
             this.datagridview1.TabIndex = 0;
             this.datagridview1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.datagridview1.BackgroundColor = System.Drawing.Color.FromArgb(37, 37, 38);
@@ -200,6 +214,7 @@
         private System.Windows.Forms.Button button_Articoli;
         private System.Windows.Forms.Button button_Tipologie;
         private System.Windows.Forms.Button button_Fornitori;
+        private System.Windows.Forms.Button button_TipologieArticoli;
         private System.Windows.Forms.DataGridView datagridview1;
     }
 }

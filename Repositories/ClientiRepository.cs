@@ -66,8 +66,8 @@ public class ClientiRepository
             {
                 conn.Open();
 
-                string query = @"INSERT INTO Cliente (Rag_Soc, Cognome, Nome, Indirizzo, CAP, Città, Provincia, Telefono, Email, Note1, Note2)
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                string query = @"INSERT INTO Cliente ([Rag_Soc], [Cognome], [Nome], [Indirizzo], [CAP], [Città], [Provincia], [Telefono], [Email], [Note1], [Note2])
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
                 using (OleDbCommand cmd = new(query, conn))
                 {

@@ -27,7 +27,7 @@ public partial class Form_Gestione_Eventi : Form
         buttonSalva.Click += (s, ev) => SalvaEventi();
         buttonNuovo.Click += (s, ev) => AggiungiNuovoEvento();
         buttonChiudi.Click += (s, ev) => buttonChiudi_Click();
-        dataGridViewEventi.CellClick += (s, ev) => DataGridViewEventi_CellClick(s, ev);
+        dataGridViewEventi.CellClick += DataGridViewEventi_CellClick;
         monthCalendar.DateSelected += MonthCalendar_DateSelected;
         monthCalendar.Leave += MonthCalendar_Leave;
         dataGridViewEventi.ColumnHeaderMouseClick += (s, ev) => Form_Principale.EvidenziaDatePassate(dataGridViewEventi);

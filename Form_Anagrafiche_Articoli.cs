@@ -37,17 +37,24 @@ public partial class Form_Anagrafiche_Articoli : Form
 
             // Configurazione colonne
             if (dataGridViewArticoli.Columns.Contains("ID")) dataGridViewArticoli.Columns["ID"]!.Visible = false;
+            if (dataGridViewArticoli.Columns.Contains("ID_Fornitore")) dataGridViewArticoli.Columns["ID_Fornitore"]!.Visible = false;
+            if (dataGridViewArticoli.Columns.Contains("ID_Tipologia")) dataGridViewArticoli.Columns["ID_Tipologia"]!.Visible = false;   
             
             if (dataGridViewArticoli.Columns.Contains("Codice_interno")) 
                 dataGridViewArticoli.Columns["Codice_interno"]!.HeaderText = "Codice";
-            if (dataGridViewArticoli.Columns.Contains("Descrizione")) 
-                dataGridViewArticoli.Columns["Descrizione"]!.HeaderText = "Descrizione";
+            dataGridViewArticoli.Columns["Codice_interno"]!.DisplayIndex = 0;
+            if (dataGridViewArticoli.Columns.Contains("Articoli.Descrizione")) 
+                dataGridViewArticoli.Columns["Articoli.Descrizione"]!.HeaderText = "Descrizione";
+            dataGridViewArticoli.Columns["Articoli.Descrizione"]!.DisplayIndex = 1;
             if (dataGridViewArticoli.Columns.Contains("Giacenza")) 
                 dataGridViewArticoli.Columns["Giacenza"]!.HeaderText = "Giacenza";
+            dataGridViewArticoli.Columns["Giacenza"]!.DisplayIndex = 2;
             if (dataGridViewArticoli.Columns.Contains("Rag_Soc")) 
                 dataGridViewArticoli.Columns["Rag_Soc"]!.HeaderText = "Fornitore";
-            if (dataGridViewArticoli.Columns.Contains("Descrizione") && dataGridViewArticoli.Columns.Count > 5) 
-                dataGridViewArticoli.Columns[dataGridViewArticoli.Columns.Count - 1]!.HeaderText = "Tipologia";
+            dataGridViewArticoli.Columns["Rag_Soc"]!.DisplayIndex = 3;
+            if (dataGridViewArticoli.Columns.Contains("Tipologia_Articoli.Descrizione") ) 
+                dataGridViewArticoli.Columns["Tipologia_Articoli.Descrizione"]!.HeaderText = "Tipologia";
+            dataGridViewArticoli.Columns["Tipologia_Articoli.Descrizione"]!.DisplayIndex = 4;
 
             dataGridViewArticoli.AutoResizeColumns();
             dataGridViewArticoli.AutoResizeRows();
