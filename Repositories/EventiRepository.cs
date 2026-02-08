@@ -95,33 +95,15 @@ public class EventiRepository
             {
                 conn.Open();
 
-                // Verifica se la colonna Note esiste nel database
-                string query;
-                OleDbCommand cmd;
-                
-                if (eventoRow.Table.Columns.Contains("Note"))
-                {
-                    query = @"INSERT INTO Evento (Nome_Evento, Data_inizio, Data_fine, ID_Cliente, ID_Tipologia_noleggi, Note)
-                           VALUES (?, ?, ?, ?, ?, ?);";
-                    cmd = new(query, conn);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Nome_Evento"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_inizio"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_fine"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Cliente"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Tipologia_noleggi"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Note"] ?? DBNull.Value);
-                }
-                else
-                {
-                    query = @"INSERT INTO Evento (Nome_Evento, Data_inizio, Data_fine, ID_Cliente, ID_Tipologia_noleggi)
-                           VALUES (?, ?, ?, ?, ?);";
-                    cmd = new(query, conn);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Nome_Evento"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_inizio"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_fine"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Cliente"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Tipologia_noleggi"] ?? DBNull.Value);
-                }
+                string query = @"INSERT INTO [Evento] ([Nome_Evento], [Data_inizio], [Data_fine], [ID_Cliente], [ID_Tipologia_noleggi], [Note])
+                               VALUES (?, ?, ?, ?, ?, ?);";
+                OleDbCommand cmd = new(query, conn);
+                cmd.Parameters.AddWithValue("?", eventoRow["Nome_Evento"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["Data_inizio"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["Data_fine"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["ID_Cliente"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["ID_Tipologia_noleggi"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["Note"] ?? DBNull.Value);
 
                 using (cmd)
                 {
@@ -146,39 +128,18 @@ public class EventiRepository
             {
                 conn.Open();
 
-                // Verifica se la colonna Note esiste nel database
-                string query;
-                OleDbCommand cmd;
-                
-                if (eventoRow.Table.Columns.Contains("Note"))
-                {
-                    query = @"UPDATE Evento SET 
-                           Nome_Evento = ?, Data_inizio = ?, Data_fine = ?, 
-                           ID_Cliente = ?, ID_Tipologia_noleggi = ?, Note = ?
-                           WHERE ID = ?;";
-                    cmd = new(query, conn);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Nome_Evento"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_inizio"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_fine"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Cliente"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Tipologia_noleggi"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Note"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID"]);
-                }
-                else
-                {
-                    query = @"UPDATE Evento SET 
-                           Nome_Evento = ?, Data_inizio = ?, Data_fine = ?, 
-                           ID_Cliente = ?, ID_Tipologia_noleggi = ?
-                           WHERE ID = ?;";
-                    cmd = new(query, conn);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Nome_Evento"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_inizio"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["Data_fine"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Cliente"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID_Tipologia_noleggi"] ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("?", eventoRow["ID"]);
-                }
+                string query = @"UPDATE [Evento] SET 
+                               [Nome_Evento] = ?, [Data_inizio] = ?, [Data_fine] = ?, 
+                               [ID_Cliente] = ?, [ID_Tipologia_noleggi] = ?, [Note] = ?
+                               WHERE [ID] = ?;";
+                OleDbCommand cmd = new(query, conn);
+                cmd.Parameters.AddWithValue("?", eventoRow["Nome_Evento"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["Data_inizio"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["Data_fine"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["ID_Cliente"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["ID_Tipologia_noleggi"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["Note"] ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("?", eventoRow["ID"]);
 
                 using (cmd)
                 {
