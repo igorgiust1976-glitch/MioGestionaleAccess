@@ -85,7 +85,11 @@ public partial class Form_EventoDettagli : Form
                 if (row["ID_Tipologia_noleggi"] is int idTipologia)
                     comboBoxTipologia.SelectedValue = idTipologia;
                 
-                textBoxNote.Text = row["Note"]?.ToString() ?? "";
+                // Leggi Note solo se la colonna esiste nello schema
+                if (dt.Columns.Contains("Note"))
+                {
+                    textBoxNote.Text = row["Note"]?.ToString() ?? "";
+                }
             }
         }
         catch (Exception ex)
@@ -137,13 +141,20 @@ public partial class Form_EventoDettagli : Form
 
         try
         {
-            DataRow dataRow = new DataTable().NewRow();
+            // Recupera lo schema dal repository per creare una DataRow con le colonne corrette
+            var dtSchema = eventiRepository.GetAll();
+            DataRow dataRow = dtSchema.NewRow();
             dataRow["Nome_Evento"] = textBoxNomeEvento.Text;
             dataRow["Data_inizio"] = dateTimePickerInizio.Value;
             dataRow["Data_fine"] = dateTimePickerFine.Value;
             dataRow["ID_Cliente"] = comboBoxCliente.SelectedValue;
             dataRow["ID_Tipologia_noleggi"] = comboBoxTipologia.SelectedValue;
-            dataRow["Note"] = textBoxNote.Text;
+            
+            // Assegna Note solo se la colonna esiste nello schema
+            if (dtSchema.Columns.Contains("Note"))
+            {
+                dataRow["Note"] = textBoxNote.Text;
+            }
 
             if (eventoId.HasValue)
             {
