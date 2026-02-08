@@ -4,8 +4,42 @@
 Data aggiornamento: 08/02/2026
 
 ================================================================================
-  🎯 ALLINEAMENTO GESTIONE EVENTI AL PATTERN CRUD (08/02/2026)
+  🎯 RIMOZIONE BOTTONE GESTIONE SAGRE (08/02/2026)
 ================================================================================
+
+OBJECTIVE: Rimuovere bottone "Gestione Sagre" da Form_Principale
+RISULTATO: ✅ COMPLETATO
+
+✅ MODIFICHE APPLICATE:
+  
+  Form_Principale.cs:
+  - Rimosso Click handler: button_Sagre.Click += (s, ev) => button_Sagre_Click();
+  - Rimosso metodo button_Sagre_Click() (che conteneva solo // TODO)
+  - Bottoni rimasti: Eventi, Stampa, Chiudi (header row)
+  
+  Form_Principale.Designer.cs:
+  - Rimosso blocco di configurazione button_Sagre (15 linee)
+  - Riposizionato button_Stampa: Point(285, 15) ← Point(150, 15)
+  - Riposizionato button_Chiudi: Point(285, 15) ← Point(420, 15)
+  - Rimosso button_Sagre da Controls.AddRange
+  - Rimosso dichiarazione: private System.Windows.Forms.Button button_Sagre;
+  
+  Impatto:
+  ✓ UI più pulita con 3 soli bottoni topbar
+  ✓ Spazio visuale recuperato
+  ✓ Nessuna perdita di funzionalità (non implementata)
+  ✓ Codice snellito (-22 linee)
+
+✅ VERIFICHE:
+  - Compilazione: 0 errori di sintassi ✅
+  - Nessun riferimento residuo a button_Sagre
+  - Commit: 5bb5bcb
+  - Push: GitHub OK
+
+================================================================================
+  08/02/2026 - ALLINEAMENTO GESTIONE EVENTI AL PATTERN CRUD
+================================================================================
+
 
 OBJECTIVE: Uniformare Form_Gestione_Eventi alle gestioni del progetto (CRUD pattern)
 RISULTATO: ✅ COMPLETATO CON SUCCESSO
