@@ -43,25 +43,11 @@
             this.button_Eventi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_Eventi.Text = "Gestione Eventi";
             this.Controls.Add(this.button_Eventi);
-            // 
-            // button_Sagre
-            // 
-            this.button_Sagre = new System.Windows.Forms.Button();
-            this.button_Sagre.Location = new System.Drawing.Point(150, 15);
-            this.button_Sagre.Name = "button_Sagre";
-            this.button_Sagre.Size = new System.Drawing.Size(130, 25);
-            this.button_Sagre.TabIndex = 0;
-            this.button_Sagre.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button_Sagre.ForeColor = System.Drawing.Color.FromArgb(204, 204, 204);
-            this.button_Sagre.BackColor = System.Drawing.Color.FromArgb(151, 51, 51);
-            this.button_Sagre.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Sagre.Text = "Gestione Sagre";
-            this.Controls.Add(this.button_Sagre);
             //
             // button_Stampa
             // 
             this.button_Stampa = new System.Windows.Forms.Button();
-            this.button_Stampa.Location = new System.Drawing.Point(285, 15);
+            this.button_Stampa.Location = new System.Drawing.Point(150, 15);
             this.button_Stampa.Name = "button_Stampa";
             this.button_Stampa.Size = new System.Drawing.Size(130, 25);
             this.button_Stampa.TabIndex = 0;
@@ -75,7 +61,7 @@
             // button_Chiudi
             // 
             this.button_Chiudi = new System.Windows.Forms.Button();
-            this.button_Chiudi.Location = new System.Drawing.Point(420, 15);
+            this.button_Chiudi.Location = new System.Drawing.Point(285, 15);
             this.button_Chiudi.Name = "button_Chiudi";
             this.button_Chiudi.Size = new System.Drawing.Size(130, 25);
             this.button_Chiudi.TabIndex = 0;
@@ -193,7 +179,6 @@
             // 
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                 this.button_Eventi,
-                this.button_Sagre,
                 this.button_Stampa,
                 this.button_Chiudi,
                 this.groupBox_Anagrafiche,
@@ -206,7 +191,6 @@
 
         // Control declarations
         private System.Windows.Forms.Button button_Eventi;
-        private System.Windows.Forms.Button button_Sagre;
         private System.Windows.Forms.Button button_Stampa;
         private System.Windows.Forms.Button button_Chiudi;
         private System.Windows.Forms.GroupBox groupBox_Anagrafiche;

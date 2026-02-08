@@ -15,7 +15,6 @@ public partial class Form_Principale : Form
     private void Form_Principale_Load(object? sender, EventArgs e)
     {
         button_Eventi.Click += (s, ev) => button_Eventi_Click();
-        button_Sagre.Click += (s, ev) => button_Sagre_Click();
         button_Anagrafiche.Click += (s, ev) => button_Anagrafiche_Click();
         button_Stampa.Click += (s, ev) => button_Stampa_Click();
         button_Articoli.Click += (s, ev) => button_Articoli_Click();
@@ -94,11 +93,6 @@ public partial class Form_Principale : Form
         
         // Ricarica la tabella dopo aver chiuso Form_Gestione_Eventi (se sono state fatte modifiche)
         CaricaTabella_Eventi();
-    }
-
-    private void button_Sagre_Click()
-    {
-        // TODO: Implementare logica
     }
 
     private void button_Anagrafiche_Click()
