@@ -137,7 +137,9 @@ public partial class Form_EventoDettagli : Form
 
         try
         {
-            DataRow dataRow = new DataTable().NewRow();
+            // Recupera lo schema dal repository per creare una DataRow con le colonne corrette
+            var dtSchema = eventiRepository.GetAll();
+            DataRow dataRow = dtSchema.NewRow();
             dataRow["Nome_Evento"] = textBoxNomeEvento.Text;
             dataRow["Data_inizio"] = dateTimePickerInizio.Value;
             dataRow["Data_fine"] = dateTimePickerFine.Value;
