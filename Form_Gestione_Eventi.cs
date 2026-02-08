@@ -7,10 +7,6 @@ using MioGestionaleAccess.Services;
 public partial class Form_Gestione_Eventi : Form
 {
     private readonly EventiRepository eventiRepository = new();
-    private readonly ClientiRepository clientiRepository = new();
-    private readonly TipologieRepository tipologieRepository = new();
-    
-    private DataGridViewCell? activeDateCell;
     private DataTable? datiEventi;
 
     public Form_Gestione_Eventi()
@@ -24,199 +20,37 @@ public partial class Form_Gestione_Eventi : Form
         Text = "Gestione Eventi";
         
         ConfiguraDataGridView();
-        ConfiguraDataGridViewRighe();
-        CaricaComboBoxes();
-        
-        // Wire degli eventi
-        buttonCarica.Click += (s, ev) => CaricaEventi();
-        buttonSalva.Click += (s, ev) => SalvaEventi();
-        buttonNuovo.Click += (s, ev) => AggiungiNuovoEvento();
-        buttonChiudi.Click += (s, ev) => buttonChiudi_Click();
-        dataGridViewEventi.CellClick += DataGridViewEventi_CellClick;
-        monthCalendar.DateSelected += MonthCalendar_DateSelected;
-        monthCalendar.Leave += MonthCalendar_Leave;
-        dataGridViewEventi.ColumnHeaderMouseClick += (s, ev) => Form_Principale.EvidenziaDatePassate(dataGridViewEventi);
-        
         CaricaEventi();
+
+        // Wire degli eventi
+        buttonAggiungi.Click += (s, ev) => buttonAggiungi_Click();
+        buttonModifica.Click += (s, ev) => buttonModifica_Click();
+        buttonElimina.Click += (s, ev) => buttonElimina_Click();
+        buttonChiudi.Click += (s, ev) => buttonChiudi_Click();
+        dataGridViewEventi.ColumnHeaderMouseClick += (s, ev) => Form_Principale.EvidenziaDatePassate(dataGridViewEventi);
     }
 
     private void ConfiguraDataGridView()
     {
         dataGridViewEventi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         dataGridViewEventi.MultiSelect = false;
+        dataGridViewEventi.ReadOnly = true;
         dataGridViewEventi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
     }
 
-    private void ConfiguraDataGridViewRighe()
-    {
-        dataGridViewEventi_Riga.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        dataGridViewEventi_Riga.MultiSelect = false;
-        dataGridViewEventi_Riga.ReadOnly = true;
-        dataGridViewEventi_Riga.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-    }
-
-    private void CaricaComboBoxes()
-    {
-        try
-        {
-            var clientiTable = clientiRepository.GetAll();
-            var tipologieTable = tipologieRepository.GetAll();
-            
-            DataGridViewComboBoxColumn comboCliente = new()
-            {
-                Name = "ComboCliente",
-                HeaderText = "Cliente",
-                DataPropertyName = "ID_Cliente",
-                DataSource = clientiTable,
-                DisplayMember = "Rag_Soc",
-                ValueMember = "ID"
-            };
-            dataGridViewEventi.Columns.Add(comboCliente);
-            
-            DataGridViewComboBoxColumn comboTipologia = new()
-            {
-                Name = "ComboTipologia",
-                HeaderText = "Tipo Evento",
-                DataPropertyName = "ID_Tipologia_noleggi",
-                DataSource = tipologieTable,
-                DisplayMember = "Descrizione",
-                ValueMember = "ID"
-            };
-            dataGridViewEventi.Columns.Add(comboTipologia);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Errore nel caricamento dei dati per i ComboBox: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-    }
-
-    private void DataGridViewEventi_CellClick(object? s, DataGridViewCellEventArgs ev)
-    {
-        if (ev.RowIndex < 0 || ev.ColumnIndex < 0) return;
-        
-        try
-        {
-            DataGridViewRow row = dataGridViewEventi.Rows[ev.RowIndex];
-            
-            if (dataGridViewEventi.Columns.Contains("ID") && row.Cells["ID"].Value != null)
-            {
-                if (int.TryParse(row.Cells["ID"].Value.ToString() ?? "", out int idEvento))
-                {
-                    var dtRighe = eventiRepository.GetEventoRighe(idEvento);
-                    dataGridViewEventi_Riga.DataSource = dtRighe;
-                }
-            }
-            
-            if (ev.ColumnIndex >= 0 && ev.ColumnIndex < dataGridViewEventi.Columns.Count)
-            {
-                string? colName = dataGridViewEventi.Columns[ev.ColumnIndex]?.Name;
-                if (colName == "Data_inizio" || colName == "Data_fine")
-                {
-                    activeDateCell = dataGridViewEventi.Rows[ev.RowIndex].Cells[ev.ColumnIndex];
-                    var cellDisplayRect = dataGridViewEventi.GetCellDisplayRectangle(ev.ColumnIndex, ev.RowIndex, false);
-                    monthCalendar.Location = new Point(cellDisplayRect.Left, cellDisplayRect.Bottom);
-                    monthCalendar.SetDate(activeDateCell.Value as DateTime? ?? DateTime.Now);
-                    monthCalendar.Visible = true;
-                    monthCalendar.BringToFront();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Errore durante il caricamento dei dati della riga: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-    }
-
-    private void MonthCalendar_DateSelected(object? sender, DateRangeEventArgs e)
-    {
-        if (activeDateCell != null)
-        {
-            activeDateCell.Value = e.Start;
-            monthCalendar.Visible = false;
-        }
-    }
-
-    private void MonthCalendar_Leave(object? sender, EventArgs e)
-    {
-        monthCalendar.Visible = false;
-    }
-
-    private void buttonChiudi_Click()
-    {
-        this.Close();
-    }
-
-    private bool ValidaRiga(DataGridViewRow row)
-    {
-        if (row.Cells["Nome_Evento"]?.Value == null || string.IsNullOrWhiteSpace(row.Cells["Nome_Evento"].Value.ToString()))
-        {
-            MessageBox.Show("Nome Evento è obbligatorio.", "Validazione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
-        }
-        
-        if (row.Cells["Data_inizio"]?.Value == null || row.Cells["Data_inizio"].Value == DBNull.Value)
-        {
-            MessageBox.Show("Data Inizio è obbligatoria.", "Validazione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
-        }
-        
-        if (row.Cells["Data_fine"]?.Value == null || row.Cells["Data_fine"].Value == DBNull.Value)
-        {
-            MessageBox.Show("Data Fine è obbligatoria.", "Validazione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
-        }
-        
-        if (row.Cells["ComboCliente"]?.Value == null || row.Cells["ComboCliente"].Value == DBNull.Value)
-        {
-            MessageBox.Show("Cliente è obbligatorio.", "Validazione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
-        }
-        
-        if (row.Cells["ComboTipologia"]?.Value == null || row.Cells["ComboTipologia"].Value == DBNull.Value)
-        {
-            MessageBox.Show("Tipo Evento è obbligatorio.", "Validazione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
-        }
-        
-        return true;
-    }
-
-    private void AggiungiNuovoEvento()
-    {
-        try
-        {
-            if (datiEventi == null || datiEventi.Rows.Count == 0)
-            {
-                MessageBox.Show("Carica prima i dati cliccando su 'Carica Eventi'.", "Avviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            
-            DataRow newRow = datiEventi!.NewRow();
-            newRow["Nome_Evento"] = "";
-            newRow["Data_inizio"] = DateTime.Now;
-            newRow["Data_fine"] = DateTime.Now;
-            newRow["ID_Cliente"] = DBNull.Value;
-            newRow["ID_Tipologia_noleggi"] = DBNull.Value;
-            newRow["ID_evento_riga"] = DBNull.Value;
-            newRow["Rag_Soc"] = "";
-            newRow["Descrizione"] = "";
-            
-            datiEventi.Rows.Add(newRow);
-            MessageBox.Show("Nuova riga aggiunta. Compila i dati e salva.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Errore nell'aggiunta della nuova riga: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-    }
-
+    /// <summary>
+    /// Carica tutti gli eventi dal repository
+    /// </summary>
+    /// <summary>
+    /// Carica tutti gli eventi dal repository
+    /// </summary>
     private void CaricaEventi()
     {
         try
         {
             datiEventi = eventiRepository.GetAll();
             dataGridViewEventi.DataSource = datiEventi;
-            
+
             // Nascondi colonne non necessarie
             if (dataGridViewEventi.Columns.Contains("ID")) 
                 dataGridViewEventi.Columns["ID"].Visible = false;
@@ -251,55 +85,85 @@ public partial class Form_Gestione_Eventi : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Errore nel caricamento: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Errore nel caricamento degli eventi: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    private void SalvaEventi()
+    private void buttonAggiungi_Click()
+    {
+        using (Form_EventoDettagli formDettagli = new Form_EventoDettagli(null))
+        {
+            if (formDettagli.ShowDialog(this) == DialogResult.OK)
+            {
+                CaricaEventi();
+            }
+        }
+    }
+
+    private void buttonModifica_Click()
+    {
+        if (dataGridViewEventi.SelectedRows.Count == 0)
+        {
+            MessageBox.Show("Selezionare un evento da modificare.", "Avviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        DataGridViewRow selectedRow = dataGridViewEventi.SelectedRows[0];
+        if (selectedRow.Cells["ID"].Value is int eventoId)
+        {
+            using (Form_EventoDettagli formDettagli = new Form_EventoDettagli(eventoId))
+            {
+                if (formDettagli.ShowDialog(this) == DialogResult.OK)
+                {
+                    CaricaEventi();
+                }
+            }
+        }
+    }
+
+    private void buttonElimina_Click()
+    {
+        if (dataGridViewEventi.SelectedRows.Count == 0)
+        {
+            MessageBox.Show("Selezionare un evento da eliminare.", "Avviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        DataGridViewRow selectedRow = dataGridViewEventi.SelectedRows[0];
+        if (selectedRow.Cells["ID"].Value is int eventoId)
+        {
+            string nomeEvento = selectedRow.Cells["Nome_Evento"]?.Value?.ToString() ?? "Sconosciuto";
+
+            DialogResult result = MessageBox.Show(
+                $"Sei sicuro di voler eliminare l'evento:\n\n{nomeEvento}?",
+                "Conferma eliminazione",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                EliminaEvento(eventoId);
+            }
+        }
+    }
+
+    private void EliminaEvento(int eventoId)
     {
         try
         {
-            foreach (DataGridViewRow row in dataGridViewEventi.Rows)
-            {
-                if (row.IsNewRow) continue;
-                
-                if (!ValidaRiga(row))
-                {
-                    continue;
-                }
-                
-                object idObj = row.Cells["ID"]?.Value;
-                string nomeEvento = row.Cells["Nome_Evento"].Value?.ToString() ?? "";
-                DateTime dataInizio = Convert.ToDateTime(row.Cells["Data_inizio"].Value);
-                DateTime dataFine = Convert.ToDateTime(row.Cells["Data_fine"].Value);
-                int idCliente = Convert.ToInt32(row.Cells["ComboCliente"].Value);
-                int idTipologia = Convert.ToInt32(row.Cells["ComboTipologia"].Value);
-                
-                DataRow dataRow = datiEventi!.NewRow();
-                dataRow["Nome_Evento"] = nomeEvento;
-                dataRow["Data_inizio"] = dataInizio;
-                dataRow["Data_fine"] = dataFine;
-                dataRow["ID_Cliente"] = idCliente;
-                dataRow["ID_Tipologia_nolegzi"] = idTipologia;
-                
-                if (idObj != null && idObj != DBNull.Value && int.TryParse(idObj.ToString() ?? "", out int id))
-                {
-                    dataRow["ID"] = id;
-                    eventiRepository.Update(dataRow);
-                }
-                else
-                {
-                    eventiRepository.Add(dataRow);
-                }
-            }
-            
-            MessageBox.Show("Modifiche salvate con successo!", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            eventiRepository.Delete(eventoId);
+            MessageBox.Show("Evento eliminato con successo.", "Successo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             CaricaEventi();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Errore nel salvataggio: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Errore nell'eliminazione dell'evento: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private void buttonChiudi_Click()
+    {
+        this.Close();
     }
 }
 

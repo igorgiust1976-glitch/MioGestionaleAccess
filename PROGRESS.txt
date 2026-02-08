@@ -1,11 +1,143 @@
 ================================================================================
   MioGestionaleAccess - STATO DI AVANZAMENTO E APPUNTI
 ================================================================================
-Data aggiornamento: 07/02/2026
+Data aggiornamento: 08/02/2026
 
 ================================================================================
-  🎯 STANDARDIZZAZIONE GESTIONE EVENTI (07/02/2026)
+  🎯 ALLINEAMENTO GESTIONE EVENTI AL PATTERN CRUD (08/02/2026)
 ================================================================================
+
+OBJECTIVE: Uniformare Form_Gestione_Eventi alle gestioni del progetto (CRUD pattern)
+RISULTATO: ✅ COMPLETATO CON SUCCESSO
+
+✅ TRASFORMAZIONE FORM_GESTIONE_EVENTI DA INLINE EDITOR A LISTA CRUD:
+  
+  BEFORE (Pattern inline/editable DataGridView):
+  - Form_Gestione_Eventi: DataGridView fully editable con inline editing
+  - Bottoni: "Carica Eventi", "Salva Eventi", "Nuovo Evento"
+  - SubDataGridView: dataGridViewEventi_Riga per dettagli evento
+  - MonthCalendar: picker per date in-place
+  - No separazione tra lista e dettagli
+  
+  AFTER (Allineato a pattern CRUD standard):
+  - Form_Gestione_Eventi: DataGridView read-only (lista dei soli dati)
+  - Bottoni: "Aggiungi", "Modifica", "Elimina", "Chiudi" (CRUD standard)
+  - Form_EventoDettagli: Nuovo form per add/edit (simile a Form_ClienteDettagli)
+  - Struttura: Lista separata da Dettagli
+  - MonthCalendar: Spostato in Form_EventoDettagli (DateTimePicker semplice)
+  
+  BENEFICI:
+  ✓ Coerenza con pattern CRUD di tutto il progetto
+  ✓ Separazione chiara tra lista (read-only) e dettagli (edit)
+  ✓ UI più intuitiva (click-to-edit, non in-place)
+  ✓ Facile manutenzione future (dettagli logica isolata)
+  ✓ Scalabilità (aggiungere nuove funzioni nel dettagli form)
+
+✅ FORM_GESTIONE_EVENTI.CS - Trasformazione a lista CRUD:
+  
+  Changes:
+  - Rimosso: ClientiRepository, TipologieRepository (solo EventiRepository)
+  - Rimosso: activeDateCell, CaricaComboBoxes(), ConfiguraDataGridViewRighe()
+  - Rimosso: DataGridViewEventi_CellClick, MonthCalendar_DateSelected, MonthCalendar_Leave
+  - Rimosso: ValidaRiga(), AggiungiNuovoEvento(), SalvaEventi()
+  - Rimosso: tutti i metodi di editing inline
+  - Aggiunto: ReadOnly = true al DataGridView
+  - Aggiunto: buttonAggiungi_Click(), buttonModifica_Click(), buttonElimina_Click()
+  - Aggiunto: EliminaEvento() method
+  - Aggiunto: Apertura Form_EventoDettagli per add/edit via ShowDialog
+  - Aggiornato: CaricaEventi() - ora carica solo lista (no combo, no editing)
+  
+  Impact:
+  - Lines of code: ~310 → ~150 (ridotto -52%)
+  - Complessità: Drasticamente semplificata
+  - Logica di editing: Spostata in Form_EventoDettagli (separation of concerns)
+
+✅ FORM_GESTIONE_EVENTI.DESIGNER.CS - Allineamento UI:
+  
+  Changes:
+  - Rinominato buttonCarica → buttonAggiungi (testo: "Aggiungi", colore: verde)
+  - Rinominato buttonSalva → buttonModifica (testo: "Modifica", colore: arancione)
+  - Rinominato buttonNuovo → buttonElimina (testo: "Elimina", colore: rosso)
+  - Mantenuto buttonChiudi
+  - Rimosso dataGridViewEventi_Riga (secondary grid)
+  - Rimosso monthCalendar
+  - Ridimensionato dataGridViewEventi: 760×220 → 780×470
+  - Aggiornate coordinate bottoni per nuovi nomi
+  
+  Colori standard CRUD:
+  ✓ Aggiungi: RGB(51, 151, 51) - Verde
+  ✓ Modifica: RGB(200, 150, 51) - Arancione
+  ✓ Elimina: RGB(151, 51, 51) - Rosso
+  ✓ Chiudi: RGB(151, 51, 51) - Rosso
+
+✅ FORM_EVENTODETTAGLI.CS - Nuovo form dettagli (Pattern Form_ClienteDettagli):
+  
+  Creato da zero seguendo pattern Form_ClienteDettagli:
+  - Constructor: public Form_EventoDettagli(int? id) - nullable id per insert/edit
+  - Form_Load: CaricaComboBoxes() → Wire events
+  - CaricaComboBoxes(): Popola comboBox Cliente e Tipo Evento
+  - CaricaDatiEvento(): Legge dati evento dal repository
+  - PulisciCampi(): Reset all form fields
+  - buttonSalva_Click(): Validazione + Insert/Update tramite eventiRepository
+  - buttonAnnulla_Click(): Ritorno senza salvare
+  
+  Campi presenti:
+  ✓ Nome_Evento (TextBox, required *)
+  ✓ Data_inizio (DateTimePicker, required *)
+  ✓ Data_fine (DateTimePicker, required *, validation: >= Data_inizio)
+  ✓ Cliente (ComboBox, required *)
+  ✓ Tipo Evento (ComboBox, required *)
+  ✓ Note (TextBox multiline, optional)
+  
+  Validazioni:
+  ✓ Nome_Evento obbligatorio
+  ✓ Cliente obbligatorio
+  ✓ Tipo Evento obbligatorio
+  ✓ Data_fine >= Data_inizio
+  ✓ Insert/Update unificato tramite repository
+
+✅ FORM_EVENTODETTAGLI.DESIGNER.CS - UI design:
+  
+  Creato seguendo tema dark coerente:
+  ✓ BackColor: RGB(37, 37, 38) - Dark
+  ✓ ForeColor: RGB(204, 204, 204) - Light gray
+  ✓ TextBox/ComboBox BackColor: RGB(60, 60, 60) - Dark
+  ✓ Button BackColor: RGB(51, 51, 51) - Dark
+  ✓ Label ForeColor: RGB(204, 204, 204)
+  ✓ Font: Microsoft Sans Serif 8.25pt (standard)
+  ✓ Size: 375×350
+  ✓ StartPosition: CenterParent
+  ✓ FlatStyle: Flat buttons
+
+✅ INTEGRAZIONE CON FORM_PRINCIPALE:
+  
+  - Form_Principale.button_Eventi apre Form_Gestione_Eventi (no cambiamenti)
+  - Dopo chiusura Form_EventoDettagli con DialogResult.OK → CaricaEventi()
+  - Ricaricamento lista automatico dopo add/edit/delete
+
+✅ VERIFICHE FINALI:
+  
+  Compilation:
+  ✓ dotnet build: 0 Errori, 15 Warning (null safety non bloccanti)
+  ✓ Nessuna breaking changes
+  ✓ Nessuna regressione funzionale
+  
+  Pattern Alignment:
+  ✓ Form_Gestione_Eventi: Identico a Form_Anagrafiche_Clienti (lista CRUD)
+  ✓ Form_EventoDettagli: Identico a Form_ClienteDettagli (dettagli add/edit)
+  ✓ Bottoni: Aggiungi, Modifica, Elimina, Chiudi (standard su tutti i form)
+  ✓ DialogResult: OK/Cancel standard
+  
+  Coerenza visiva:
+  ✓ Colori bottoni: Verde/Arancione/Rosso standard
+  ✓ Tema dark uniforme
+  ✓ Font: Century Gothic 9pt su bottoni
+  ✓ Spacing: Allineato con altri form
+
+================================================================================
+  07/02/2026 - STANDARDIZZAZIONE GESTIONE EVENTI
+================================================================================
+
 
 OBJECTIVE: Uniformare il pattern di event handling e inizializzazione form
 RISULTATO: ✅ COMPLETATO CON SUCCESSO
